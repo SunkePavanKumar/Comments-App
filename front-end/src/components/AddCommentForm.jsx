@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function AddCommentForm({ addComment }) {
+function AddCommentForm({ addComment, parentId }) {
   const [username, setUsername] = useState("");
   const [content, setContent] = useState("");
 
@@ -15,7 +15,7 @@ function AddCommentForm({ addComment }) {
       downvotes: 0,
     };
 
-    addComment(newComment);
+    addComment(parentId, newComment);
     setUsername("");
     setContent("");
   };

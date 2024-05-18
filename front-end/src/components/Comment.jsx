@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import AddCommentForm from "./AddCommentForm";
+import CommentList from "./CommentList";
 
-function Comment({ comment, onDeleteComment, onEditComment }) {
+function Comment({ comment, onDeleteComment, onEditComment, onAddReply }) {
   const [upvotes, setUpvotes] = useState(comment.upvotes);
   const [downvotes, setDownvotes] = useState(comment.downvotes);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
+  const [showReplyForm, setShowReplyForm] = useState(false);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -45,7 +48,6 @@ function Comment({ comment, onDeleteComment, onEditComment }) {
         <p className="text-gray-600">{comment.content}</p>
       )}
       {isEditing && <button onClick={handleSave}>Save</button>}
-      {/* Placeholder for upvote/downvote and edit/delete buttons */}
       <div className="comment-actions mt-2 flex space-x-2">
         <button
           className="upvote text-gray-500 hover:text-green-500"
@@ -95,7 +97,28 @@ function Comment({ comment, onDeleteComment, onEditComment }) {
         >
           Delete
         </button>
+        <button
+          onClick={() => setShowReplyForm(!showReplyForm)}
+          className="text-blue-500 hover:underline"
+        >
+          Reply
+        </button>
       </div>
+      {showReplyForm && (
+        <AddCommentForm parentId={comment.id} addComment={onAddReply} />
+      )}
+      {comment.replies && comment.replies.length > 0 && (
+        <div className="ml-4 mt-2">
+          {" "}
+          {/* Add left margin for visual nesting */}
+          <CommentList
+            comments={comment.replies}
+            onEditComment={onEditComment}
+            onDeleteComment={onDeleteComment}
+            onAddReply={onAddReply}
+          />
+        </div>
+      )}
     </div>
   );
 }
